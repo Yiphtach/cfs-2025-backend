@@ -1,4 +1,4 @@
-//API wrapper for Superhero API
+// API wrapper for Superhero API
 
 // src/config/superheroApi.js
 const axios = require('axios');
@@ -97,8 +97,4 @@ module.exports = {
     fetchConnections,
     fetchImage,
     searchCharacterByName,
-};
-
-module.exports = {
-    getSuperheroApiUrl: (id, endpoint = '') => `${SUPERHERO_API_URL}/${id}${endpoint ? `/${endpoint}` : ''}`,
 };

@@ -1,6 +1,6 @@
 //MongoDB connection setup
 //Function to connect to MongoDB
-const dotenv = require('dotenv');
+// const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const connectDB = async () => {
     try {
@@ -12,12 +12,12 @@ const connectDB = async () => {
     }
 };
 
-// MongoDB Connection Event Handlers
-mongoose.connection.on("connected", () => {
-    console.log("🎯 MongoDB connected successfully.");
-});
-mongoose.connection.on("error", (err) => {
-    console.log(`❗ MongoDB connection error: ${err}`);
-});
+// // MongoDB Connection Event Handlers
+// mongoose.connection.on("connected", () => {
+//     console.log("🎯 MongoDB connected successfully.");
+// });
+// mongoose.connection.on("error", (err) => {
+//     console.log(`❗ MongoDB connection error: ${err}`);
+// });
 
 module.exports = connectDB;
