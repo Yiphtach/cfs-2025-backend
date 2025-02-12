@@ -1,5 +1,14 @@
 // errorHandler.js - Centralized error handling middleware
-module.exports = (err, req, res, next) => {
-    console.error(err.stack);
-    res.status(err.status || 500).json({ message: err.message || 'Internal Server Error' });
+// src/middleware/errorHandler.js - Centralized Error Handling Middleware
+
+const errorHandler = (err, req, res, next) => {
+    console.error(`Error: ${err.message}`);
+    
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode).json({
+        message: err.message || 'Internal Server Error',
+        stack: process.env.NODE_ENV === 'development' ? err.stack : null,
+    });
 };
+
+module.exports = errorHandler;

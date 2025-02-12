@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true },
     xp: { type: Number, default: 0 },
     rank: { type: Number, default: 0 },
-    favorites: [{ type: String }] // List of favorite fighter IDs
-});
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Character' }] // List of favorite fighter IDs
+}, { timestamps: true });
 
 module.exports = mongoose.model('User', UserSchema);
