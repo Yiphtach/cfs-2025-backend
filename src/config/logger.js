@@ -11,3 +11,13 @@ const logStream = fs.createWriteStream(path.join(__dirname, '../../logs/access.l
 const logger = morgan('combined', { stream: logStream });
 
 module.exports = logger;
+
+// Fix for 404 error on root path
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+    res.send('Welcome to the MERN Comic Fight API');
+});
+
+module.exports = app;
