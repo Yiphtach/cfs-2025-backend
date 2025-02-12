@@ -1,0 +1,1 @@
+//Fight simulation logic
