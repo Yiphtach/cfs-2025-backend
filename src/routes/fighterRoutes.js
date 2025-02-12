@@ -1,5 +1,5 @@
 const express = require('express');
-const { getFighterById, searchFighterByName, getFighterStats } = require('../controllers/fighterController');
+const { getFighterById, searchFighterByName, getFighterStats, getFighterImage } = require('../controllers/fighterController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -18,6 +18,11 @@ router.get('/:id', authMiddleware, getFighterById);
 // @desc    Get all fighter details (powerstats, biography, etc.)
 // @access  Public
 router.get('/:id/:category', authMiddleware, getFighterStats);
+
+// @route   GET /api/fighters/:id/image
+// @desc    Fetch fighter image from the Superhero API
+// @access  Public
+router.get('/:id/image', authMiddleware, getFighterImage);
 
 module.exports = router;
 // The fighterRoutes.js file defines the routes for searching for fighters by name, getting fighter details by ID, and getting all fighter details. The routes are protected and require authentication using the authMiddleware middleware. The routes are defined as follows:

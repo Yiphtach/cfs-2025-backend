@@ -22,6 +22,7 @@ const fetchFromAPI = async (endpoint) => {
     }
 };
 
+
 const fetchCharacterById = (characterId) => fetchFromAPI(`${characterId}`);
 const fetchPowerStats = (characterId) => fetchFromAPI(`${characterId}/powerstats`);
 const fetchBiography = (characterId) => fetchFromAPI(`${characterId}/biography`);

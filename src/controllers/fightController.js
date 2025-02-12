@@ -72,4 +72,6 @@ const getFightHistory = async (req, res) => {
     }
 };
 
+
+
 module.exports = { simulateFight, getFightHistory };
