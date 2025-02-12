@@ -1,4 +1,3 @@
-// Real-time fight commentary using Socket.io
 // src/controllers/chatController.js - Chat Controller Logic
 const Chat = require('../models/Chat');
 
@@ -16,14 +15,15 @@ const getChatHistory = async (req, res) => {
     }
 };
 
-// @desc Handle new chat messages
-const handleNewMessage = async (io, fightId, userId, message) => {
+// @desc Save a new chat message and broadcast it
+const saveChatMessage = async (io, fightId, userId, username, message) => {
     try {
-        const newMessage = await Chat.create({ fightId, userId, message });
+        const newMessage = new Chat({ fightId, userId, username, message });
+        await newMessage.save();
         io.to(fightId).emit('receiveMessage', newMessage);
     } catch (error) {
         console.error('Error saving chat message:', error);
     }
 };
 
-module.exports = { getChatHistory, handleNewMessage };
+module.exports = { getChatHistory, saveChatMessage };

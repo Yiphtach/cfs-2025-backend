@@ -1,92 +1,35 @@
-// API wrapper for Superhero API
-
-// src/config/superheroApi.js
+// src/services/superheroApi.js - API Wrapper for Superhero API
 const axios = require('axios');
 const dotenv = require('dotenv');
+const axiosRetry = require('axios-retry').default;
 
 dotenv.config();
 
 const API_BASE_URL = `https://superheroapi.com/api/${process.env.SUPERHERO_API_KEY}`;
+const isDev = process.env.NODE_ENV === 'development';
 
-const fetchCharacterById = async (characterId) => {
+// Configure automatic retries for failed requests
+axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
+
+const fetchFromAPI = async (endpoint) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/${characterId}`);
+        const response = await axios.get(`${API_BASE_URL}/${endpoint}`);
+        if (isDev) console.log(`✅ API Response for ${endpoint}:`, response.data);
         return response.data;
     } catch (error) {
-        console.error('Error fetching character by ID:', error);
-        throw error;
+        console.error(`❌ Error fetching ${endpoint}:`, error.message);
+        throw new Error('Failed to fetch superhero data');
     }
 };
 
-const fetchPowerStats = async (characterId) => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/${characterId}/powerstats`);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching power stats:', error);
-        throw error;
-    }
-};
-
-const fetchBiography = async (characterId) => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/${characterId}/biography`);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching biography:', error);
-        throw error;
-    }
-};
-
-const fetchAppearance = async (characterId) => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/${characterId}/appearance`);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching appearance:', error);
-        throw error;
-    }
-};
-
-const fetchWork = async (characterId) => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/${characterId}/work`);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching work details:', error);
-        throw error;
-    }
-};
-
-const fetchConnections = async (characterId) => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/${characterId}/connections`);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching connections:', error);
-        throw error;
-    }
-};
-
-const fetchImage = async (characterId) => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/${characterId}/image`);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching image:', error);
-        throw error;
-    }
-};
-
-const searchCharacterByName = async (name) => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/search/${name}`);
-        return response.data;
-    } catch (error) {
-        console.error('Error searching character by name:', error);
-        throw error;
-    }
-};
+const fetchCharacterById = (characterId) => fetchFromAPI(`${characterId}`);
+const fetchPowerStats = (characterId) => fetchFromAPI(`${characterId}/powerstats`);
+const fetchBiography = (characterId) => fetchFromAPI(`${characterId}/biography`);
+const fetchAppearance = (characterId) => fetchFromAPI(`${characterId}/appearance`);
+const fetchWork = (characterId) => fetchFromAPI(`${characterId}/work`);
+const fetchConnections = (characterId) => fetchFromAPI(`${characterId}/connections`);
+const fetchImage = (characterId) => fetchFromAPI(`${characterId}/image`);
+const searchCharacterByName = (name) => fetchFromAPI(`search/${name}`);
 
 module.exports = {
     fetchCharacterById,

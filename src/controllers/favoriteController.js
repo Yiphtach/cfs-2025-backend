@@ -1,22 +1,20 @@
-//Handle favorites
-// src/controllers/favoriteController.js - Controller for Managing Favorites
 const Favorite = require('../models/Favorite');
 const User = require('../models/User');
 
-// @desc    Add a favorite character
-// @route   POST /api/favorites/add
+// @desc    Add a favorite fighter
+// @route   POST /api/favorites
 // @access  Private
 const addFavorite = async (req, res) => {
     try {
-        const { characterId, name, imageUrl } = req.body;
+        const { fighterId, fighterName } = req.body;
         const userId = req.user.id;
 
-        let favorite = await Favorite.findOne({ userId, characterId });
+        let favorite = await Favorite.findOne({ userId, fighterId });
         if (favorite) {
-            return res.status(400).json({ message: 'Character already in favorites' });
+            return res.status(400).json({ message: 'Fighter already in favorites' });
         }
 
-        favorite = new Favorite({ userId, characterId, name, imageUrl });
+        favorite = new Favorite({ userId, fighterId, fighterName });
         await favorite.save();
 
         res.status(201).json(favorite);
@@ -26,7 +24,7 @@ const addFavorite = async (req, res) => {
     }
 };
 
-// @desc    Get all favorite characters for a user
+// @desc    Get all favorite fighters for a user
 // @route   GET /api/favorites
 // @access  Private
 const getFavorites = async (req, res) => {
@@ -39,15 +37,15 @@ const getFavorites = async (req, res) => {
     }
 };
 
-// @desc    Remove a character from favorites
-// @route   DELETE /api/favorites/remove/:characterId
+// @desc    Remove a fighter from favorites
+// @route   DELETE /api/favorites/:fighterId
 // @access  Private
 const removeFavorite = async (req, res) => {
     try {
-        const { characterId } = req.params;
+        const { fighterId } = req.params;
         const userId = req.user.id;
 
-        const favorite = await Favorite.findOneAndDelete({ userId, characterId });
+        const favorite = await Favorite.findOneAndDelete({ userId, fighterId });
         if (!favorite) {
             return res.status(404).json({ message: 'Favorite not found' });
         }
@@ -60,3 +58,4 @@ const removeFavorite = async (req, res) => {
 };
 
 module.exports = { addFavorite, getFavorites, removeFavorite };
+// The favoriteController.js file contains the logic for adding, getting, and removing favorite fighters. The addFavorite function adds a new favorite fighter to the database. The getFavorites function retrieves all favorite fighters for a user. The removeFavorite function removes a favorite fighter from the database. Each function handles errors and sends an appropriate response to the client.

@@ -2,6 +2,7 @@
 node_modules
 
 # Ignore environment variables
+.env 
 
 # Ignore error logs
 error.log

@@ -1,4 +1,3 @@
-//Chat messages schema (Socket.io)
 // src/models/Chat.js - Chat Schema for MongoDB
 const mongoose = require('mongoose');
 
@@ -14,9 +13,14 @@ const ChatSchema = new mongoose.Schema(
             ref: 'User',
             required: true,
         },
+        username: {
+            type: String,
+            required: true,
+        },
         message: {
             type: String,
             required: true,
+            trim: true,
         },
         timestamp: {
             type: Date,

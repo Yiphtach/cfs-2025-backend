@@ -1,12 +1,10 @@
-//MongoDB connection setup
-//Function to connect to MongoDB
 // src/config/db.js - MongoDB Connection Setup
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGODB_URI);
-        console.log(`✅ MongoDB Connected: ${mongoose.connection.host}`);
+        console.log(`✅ MongoDB Connected: ${mongoose.connection.name}`);
     } catch (error) {
         console.error(`❌ MongoDB Connection Error: ${error.message}`);
         process.exit(1); // Exit process with failure
@@ -23,15 +21,15 @@ mongoose.connection.on('error', (err) => {
 });
 
 mongoose.connection.on('disconnected', () => {
-    console.warn('⚠️ MongoDB disconnected. Reconnecting...');
-    connectDB();
+    console.warn('⚠️ MongoDB disconnected.');
 });
 
 // Gracefully handle app termination
-process.on('SIGINT', async () => {
-    await mongoose.connection.close();
-    console.log('🛑 MongoDB connection closed due to app termination.');
-    process.exit(0);
+process.on('SIGINT', () => {
+    mongoose.disconnect().then(() => {
+        console.log('🛑 MongoDB disconnected due to app termination.');
+        process.exit(0);
+    });
 });
 
 module.exports = connectDB;

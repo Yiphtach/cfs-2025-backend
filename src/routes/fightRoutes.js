@@ -1,5 +1,4 @@
-//Fight simulation routes
-// // src/routes/fightRoutes.js - Routes for Fight Simulation
+// src/routes/fightRoutes.js - Routes for Fight Simulation
 const express = require('express');
 const router = express.Router();
 const { simulateFight, getFightHistory } = require('../controllers/fightController');
@@ -16,3 +15,4 @@ router.post('/simulate', authMiddleware, simulateFight);
 router.get('/history', authMiddleware, getFightHistory);
 
 module.exports = router;
+// The fightRoutes.js file defines the routes for simulating a fight between two characters and retrieving fight history for a user. The routes are protected and require authentication using the authMiddleware middleware. The routes are defined as follows:

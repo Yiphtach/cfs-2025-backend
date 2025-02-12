@@ -6,9 +6,12 @@ const favoriteSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    itemId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Item',
+    fighterId: {
+        type: Number,
+        required: true
+    },
+    fighterName: {
+        type: String,
         required: true
     },
     createdAt: {
@@ -20,7 +23,7 @@ const favoriteSchema = new mongoose.Schema({
 });
 
 // Compound index to prevent duplicate favorites
-favoriteSchema.index({ userId: 1, itemId: 1 }, { unique: true });
+favoriteSchema.index({ userId: 1, fighterId: 1 }, { unique: true });
 
 const Favorite = mongoose.model('Favorite', favoriteSchema);
 
