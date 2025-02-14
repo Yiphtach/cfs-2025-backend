@@ -1,6 +1,7 @@
 // src/controllers/fighterController.js
 const superheroApi = require('../config/superheroApi');
 const axios = require('axios');
+const Fighter = require('../models/Fighter');
 
 // Cache configuration
 const CACHE_DURATION = 3600000; // 1 hour in milliseconds
@@ -37,29 +38,28 @@ const sendResponse = (res, data, statusCode = 200) => {
 const getFighterById = async (req, res) => {
     try {
         const { id } = req.params;
+        console.log(`Fetching superhero ID: ${id}`);
+        const fighterData = await fetchCharacterById(id);
 
-        // Check cache first
-        const cachedFighter = getCachedData(`fighter-${id}`);
-        if (cachedFighter) {
-            return sendResponse(res, cachedFighter);
+        // Check if fighter exists in DB
+        let fighter = await Fighter.findOne({ id: id });
+        if (!fighter) {
+            fighter = new Fighter({
+                id: id,
+                name: fighterData.name,
+                powerstats: fighterData.powerstats,
+                image: fighterData.image.url
+            });
+            await fighter.save();
+            console.log('Fighter saved to MongoDB:', fighter);
+        } else {
+            console.log('Fighter already exists in DB.');
         }
 
-        const fighter = await superheroApi.getCharacter(id);
-        
-        if (!fighter || fighter.response === 'error') {
-            return sendResponse(res, { message: 'Fighter not found' }, 404);
-        }
-
-        // Cache the result
-        setCacheData(`fighter-${id}`, fighter);
-        sendResponse(res, fighter);
-
+        res.json(fighter);
     } catch (error) {
-        console.error('Error fetching fighter by ID:', error);
-        sendResponse(res, { 
-            message: 'Failed to fetch fighter details',
-            error: error.message 
-        }, error.response?.status || 500);
+        console.error('Error fetching superhero:', error);
+        res.status(error.response?.status || 500).json({ message: 'Failed to fetch superhero details' });
     }
 };
 

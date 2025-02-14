@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const authMiddleware = require('../middleware/authMiddleware');
 const dotenv = require('dotenv');
+const { getUserProfile } = require('../controllers/authController');
+const { getUserSettings } = require('../controllers/authController');
 
 dotenv.config();
 
@@ -81,5 +83,13 @@ router.get('/user', authMiddleware, async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+
+// @route GET /api/auth/user
+// @desc Get user profile
+// @access Private
+router.get('/user', authMiddleware, getUserProfile);
+
+router.get('/user/settings', authMiddleware, getUserSettings);
+
 
 module.exports = router;

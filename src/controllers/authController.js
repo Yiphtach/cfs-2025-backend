@@ -35,6 +35,38 @@ const generateToken = (userId) => {
     );
 };
 
+// @desc Get user settings
+// @route GET /api/auth/user/settings
+// @access Private
+const getUserSettings = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('settings');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json(user.settings);
+    } catch (error) {
+        console.error('Error fetching user settings:', error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+// @desc Get user profile
+// @route GET /api/auth/user
+// @access Private
+const getUserProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json(user);
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
 // @route   POST /api/auth/register
 // @desc    Register a new user
 // @access  Public
@@ -254,3 +286,4 @@ router.put('/password', authMiddleware, async (req, res) => {
 });
 
 module.exports = router;
+module.exports = { getUserProfile, getUserSettings };

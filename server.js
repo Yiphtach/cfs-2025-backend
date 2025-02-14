@@ -46,6 +46,12 @@ app.use('/api/fights', authMiddleware, fightRoutes);
 app.use('/api/favorites', authMiddleware, favoriteRoutes);
 app.use('/api/chat', authMiddleware, chatRoutes);
 
+app._router.stack.forEach((route) => {
+    if (route.route && route.route.path) {
+        console.log(route.route.path);
+    }
+});
+
 // Default route for API root
 app.get('/', (req, res) => {
     res.send("Welcome to the Comic Fight Simulator API!");
