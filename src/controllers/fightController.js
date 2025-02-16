@@ -1,13 +1,14 @@
+// src/controllers/fightController.js - Fight Simulation Logic
 const Fight = require('../models/Fight');
 const User = require('../models/User');
-const { fetchPowerStats } = require('../config/superheroApi');
+const { fetchPowerStats } = require('../services/superheroApi');
 
 // Function to calculate fight winner based on power stats
 const determineWinner = (fighter1Stats, fighter2Stats) => {
     let fighter1Score = 0;
     let fighter2Score = 0;
-    const statKeys = ['intelligence', 'strength', 'speed', 'durability', 'power', 'combat'];
     
+    const statKeys = ['intelligence', 'strength', 'speed', 'durability', 'power', 'combat'];
     statKeys.forEach(stat => {
         if (parseInt(fighter1Stats[stat]) > parseInt(fighter2Stats[stat])) {
             fighter1Score++;
@@ -24,7 +25,7 @@ const determineWinner = (fighter1Stats, fighter2Stats) => {
 // @access Private
 const simulateFight = async (req, res) => {
     try {
-        const { fighter1Id, fighter2Id, fighter1Name, fighter2Name } = req.body;
+        const { fighter1Id, fighter2Id } = req.body;
         if (!fighter1Id || !fighter2Id) {
             return res.status(400).json({ message: 'Both fighters must be selected' });
         }
@@ -37,16 +38,11 @@ const simulateFight = async (req, res) => {
         }
 
         const winner = determineWinner(fighter1Stats, fighter2Stats);
-        
         const fight = await Fight.create({
+            fighter1Id,
+            fighter2Id,
+            winner: winner === 'fighter1' ? fighter1Id : fighter2Id,
             userId: req.user.id,
-            fighter1: { id: fighter1Id, name: fighter1Name },
-            fighter2: { id: fighter2Id, name: fighter2Name },
-            winner: winner === 'fighter1' ? { id: fighter1Id, name: fighter1Name } : { id: fighter2Id, name: fighter2Name },
-            fightDetails: {
-                fighter1Stats,
-                fighter2Stats
-            }
         });
 
         // Update user XP
@@ -64,14 +60,12 @@ const simulateFight = async (req, res) => {
 // @access Private
 const getFightHistory = async (req, res) => {
     try {
-        const fights = await Fight.find({ userId: req.user.id }).populate('userId');
+        const fights = await Fight.find({ userId: req.user.id }).populate('fighter1Id fighter2Id');
         res.status(200).json(fights);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });
     }
 };
-
-
 
 module.exports = { simulateFight, getFightHistory };

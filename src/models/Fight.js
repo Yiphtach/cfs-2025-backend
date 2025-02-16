@@ -1,4 +1,4 @@
-//Fight schema (History, Fighters, Outcome)
+// src/models/Fight.js - Fight Schema using Character IDs
 const mongoose = require('mongoose');
 
 const FightSchema = new mongoose.Schema({
@@ -16,7 +16,7 @@ const FightSchema = new mongoose.Schema({
         name: { type: String, required: true }
     },
     fightDetails: {
-        fighter1Stats: {
+        id1Stats: {
             intelligence: { type: Number, default: 0 },
             strength: { type: Number, default: 0 },
             speed: { type: Number, default: 0 },
@@ -24,7 +24,7 @@ const FightSchema = new mongoose.Schema({
             power: { type: Number, default: 0 },
             combat: { type: Number, default: 0 }
         },
-        fighter2Stats: {
+        id2Stats: {
             intelligence: { type: Number, default: 0 },
             strength: { type: Number, default: 0 },
             speed: { type: Number, default: 0 },
@@ -37,3 +37,4 @@ const FightSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Fight', FightSchema);
+// In this snippet, we define a FightSchema that stores the details of a fight between two fighters. The schema includes the user ID of the user who initiated the fight, the IDs and names of the two fighters, the winner of the fight, and the power stats of each fighter. The schema also includes a createdAt field to store the timestamp of when the fight was created.
