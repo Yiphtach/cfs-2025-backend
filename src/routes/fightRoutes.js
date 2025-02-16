@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { simulateFight, getFightHistory } = require('../controllers/fightController');
-const authMiddleware = require('../middleware/authMiddleware');
+const authMiddleware = require('../config/authMiddleware');
 
 // @route   POST /api/fights/simulate
 // @desc    Simulate a fight between two characters

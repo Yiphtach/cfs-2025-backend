@@ -11,7 +11,7 @@ const {
     getFighterHistory,
     toggleFavoriteFighter
 } = require('../controllers/fighterController');
-const authMiddleware = require('../middleware/authMiddleware');
+const authMiddleware = require('../config/authMiddleware');
 
 
 

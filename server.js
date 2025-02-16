@@ -16,8 +16,8 @@ const User = require('./src/models/User'); // User model for MongoDB
 const Fight = require('./src/models/Fight'); // Fight model for MongoDB
 const axios = require('axios'); // Import Axios for making API requests
 const bcrypt = require('bcryptjs'); // Import bcrypt for password hashing
-const errorHandler = require('./src/middleware/errorHandler'); // Centralized error handling
-const authMiddleware = require('./src/middleware/authMiddleware'); // JWT authentication middleware
+const errorHandler = require('./src/config/errorHandler'); // Centralized error handling
+const authMiddleware = require('./src/config/authMiddleware'); // JWT authentication middleware
 
 // Load environment variables
 dotenv.config();
